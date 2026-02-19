@@ -3,19 +3,19 @@
 public class Game {
 
    /**
- * Le plateau du jeu, stocké sous forme de tableau 
+ * Le plateau du jeu, stockÃ© sous forme de tableau 
  */
  private BoxSymbol[] board;
 
 
    /**
- * round enregistre le nombre de tours qui ont été
- * joué jusqu'à présent. Commence à 0.
+ * round enregistre le nombre de tours qui ont Ã©tÃ©
+ * jouÃ© jusqu'Ã  prÃ©sent. Commence Ã  0.
  */
  private int round;
 
    /**
- * gameState enregistre l'état actuel du jeu.
+ * gameState enregistre l'Ã©tat actuel du jeu.
  */
  private GameState gameState;
 
@@ -32,14 +32,14 @@ public class Game {
 
 
    /**
- * numberWin est le nombre de cellules du même type
+ * numberWin est le nombre de cellules du mÃªme type
  * qu'il faut aligner pour gagner la partie
  */
  private final int numberWin;
 
 
    /**
- * constructeur par défaut, pour un jeu de 3x3, qui doit
+ * constructeur par dÃ©faut, pour un jeu de 3x3, qui doit
  * aligner 3 cellules
  */
  public Game(){
@@ -48,7 +48,7 @@ public class Game {
 
   
    /**
-  * constructeur permettant de préciser le nombre de lignes
+  * constructeur permettant de prÃ©ciser le nombre de lignes
   * et le nombre de colonnes pour le jeu, ainsi que
   * le nombre de cellules qu'il faut aligner pour gagner.
     * @param rows
@@ -112,7 +112,7 @@ public class Game {
 
   /**
  *renvoie le prochain BoxSymbol prevu,
- * Cette méthode ne modifie pas l'état du jeu.
+ * Cette mÃ©thode ne modifie pas l'Ã©tat du jeu.
    * @return 
    *  the value of the enum BoxSymbol corresponding
    * to the next expected symbol.
@@ -126,7 +126,7 @@ public class Game {
    /**
  * renvoie la valeur de la case a l'index i.
  * Si l'index n'est pas valide, un message d'erreur est
- * imprimé. Le comportement est alors indéterminé
+ * imprimÃ©. Le comportement est alors indÃ©terminÃ©
     * @param i
     *  the index of the Box in the array board
     * @return 
@@ -138,14 +138,14 @@ public class Game {
  }
 
   /**
-  * Cette méthode est appelée par le prochain joueur à jouer
-  * à la case à l'index i.
+  * Cette mÃ©thode est appelÃ©e par le prochain joueur Ã  jouer
+  * Ã  la case Ã  l'index i.
   * Si l'index n'est pas valide, un message d'erreur est
-  * imprimé. Le comportement est alors indéterminé
+  * imprimÃ©. Le comportement est alors indÃ©terminÃ©
   * Si la case choisie n'est pas vide, un message d'erreur s'affiche.
-  * Le comportement est alors indéterminé
-  * Si le coup est valide, le plateau (board) est également mis à jour
-  * ainsi que l'état du jeu. Doit appeler la méthode update.
+  * Le comportement est alors indÃ©terminÃ©
+  * Si le coup est valide, le plateau (board) est Ã©galement mis Ã  jour
+  * ainsi que l'Ã©tat du jeu. Doit appeler la mÃ©thode update.
     * @param i
     *  the index of the box in the array board that has been 
     * selected by the next player
@@ -162,14 +162,14 @@ public class Game {
 
 
    /**
- * Une méthode d'assistance qui met à jour la variable gameState
- * correctement après que la case à l'index i vient d'etre défini.
- * La méthode suppose qu'avant de paramétrer la case
- * à l'index i, la variable gameState a été correctement définie.
- * cela suppose aussi qu'elle n'est appelée que si le jeu n'a pas encore été
- * été terminé lorsque la case à l'index i a été jouée
+ * Une mÃ©thode d'assistance qui met Ã  jour la variable gameState
+ * correctement aprÃ¨s que la case Ã  l'index i vient d'etre dÃ©fini.
+ * La mÃ©thode suppose qu'avant de paramÃ©trer la case
+ * Ã  l'index i, la variable gameState a Ã©tÃ© correctement dÃ©finie.
+ * cela suppose aussi qu'elle n'est appelÃ©e que si le jeu n'a pas encore Ã©tÃ©
+ * Ã©tÃ© terminÃ© lorsque la case Ã  l'index i a Ã©tÃ© jouÃ©e
  * (le jeu en cours). Il suffit donc de
- * Vérifiez si jouer à l'index i a terminé la partie.
+ * VÃ©rifiez si jouer Ã  l'index i a terminÃ© la partie.
     * @param i
     *  the index of the box in the array board that has just 
     * been set
@@ -184,8 +184,8 @@ private void update(int index){
  
 
    /**
- * Renvoie une représentation sous forme de chaîne du jeu correspondant
- * à l'exemple fourni dans la description du devoir
+ * Renvoie une reprÃ©sentation sous forme de chaÃ®ne du jeu correspondant
+ * Ã  l'exemple fourni dans la description du devoir
     * @return
     *  String representation of the game
    */

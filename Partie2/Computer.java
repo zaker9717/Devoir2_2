@@ -1,42 +1,42 @@
-
-
 public class Computer extends Player {
 
- public  void play(Game game) {
-   if(game.getRound() == game.getRows()*game.getColumns()){
-     System.out.println("Game is finished already!");
-   }
+    public void play(Game game) {
+        // Check if the game is already finished
+        if (game.getRound() == game.getRows() * game.getColumns() ||
+                game.getGameState() != GameState.PLAYING) {
+            System.out.println("Game is finished already!");
+            return;
+        }
 
-     // Vérifier que c'est bien au tour de l'ordinateur de jouer
-     if (game.nextBoxSymbol() != mySymbol) {
-         System.out.println("It is not my turn!");
-         return;
-     }
+        // Check that it's the computer's turn
+        if (game.nextBoxSymbol() != mySymbol) {
+            System.out.println("Not my turn!");
+            return;
+        }
 
-     // Trouver toutes les cases vides
-     int totalCells = game.getRows() * game.getColumns();
-     int[] emptyCells = new int[totalCells];
-     int emptyCount = 0;
+        // Find all empty cells
+        int totalCells = game.getRows() * game.getColumns();
+        int[] emptyCells = new int[totalCells];
+        int emptyCount = 0;
 
-     for (int i = 0; i < totalCells; i++) {
-         if (game.boxSymbolAt(i) == BoxSymbol.EMPTY) {
-             emptyCells[emptyCount] = i;
-             emptyCount++;
-         }
-     }
+        for (int i = 0; i < totalCells; i++) {
+            // Utiliser BoxSymbol.EMPTY (pas Game.BoxSymbol)
+            if (game.boxSymbolAt(i) == BoxSymbol.EMPTY) {
+                emptyCells[emptyCount] = i;
+                emptyCount++;
+            }
+        }
 
-     // S'il n'y a pas de cases vides, la partie devrait être terminée
-     if (emptyCount == 0) {
-         return;
-     }
+        // If no empty cells
+        if (emptyCount == 0) {
+            return;
+        }
 
-     // Choisir une case vide au hasard
-     int randomIndex = GameMain.generator.nextInt(emptyCount);
-     int chosenCell = emptyCells[randomIndex];
+        // Choose a random empty cell
+        int randomIndex = GameMain.generator.nextInt(emptyCount);
+        int chosenCell = emptyCells[randomIndex];
 
-     // Jouer le coup
-     game.play(chosenCell);
- }
-}
-
+        // Play the move
+        game.play(chosenCell);
+    }
 }
