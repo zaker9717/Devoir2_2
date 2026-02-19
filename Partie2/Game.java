@@ -3,19 +3,19 @@
 public class Game {
 
    /**
- * Le plateau du jeu, stocké sous forme de tableau 
+ * Le plateau du jeu, stock� sous forme de tableau 
  */
  private BoxSymbol[] board;
 
 
    /**
- * round enregistre le nombre de tours qui ont été
- * joué jusqu'à présent. Commence à 0.
+ * round enregistre le nombre de tours qui ont �t�
+ * jou� jusqu'� pr�sent. Commence � 0.
  */
  private int round;
 
    /**
- * gameState enregistre l'état actuel du jeu.
+ * gameState enregistre l'�tat actuel du jeu.
  */
  private GameState gameState;
 
@@ -32,14 +32,14 @@ public class Game {
 
 
    /**
- * numberWin est le nombre de cellules du même type
+ * numberWin est le nombre de cellules du m�me type
  * qu'il faut aligner pour gagner la partie
  */
  private final int numberWin;
 
 
    /**
- * constructeur par défaut, pour un jeu de 3x3, qui doit
+ * constructeur par d�faut, pour un jeu de 3x3, qui doit
  * aligner 3 cellules
  */
  public Game(){
@@ -48,7 +48,7 @@ public class Game {
 
   
    /**
-  * constructeur permettant de préciser le nombre de lignes
+  * constructeur permettant de pr�ciser le nombre de lignes
   * et le nombre de colonnes pour le jeu, ainsi que
   * le nombre de cellules qu'il faut aligner pour gagner.
     * @param rows
@@ -59,7 +59,15 @@ public class Game {
     *  the number of cells that must be aligned to win.
     */
  public Game(int rows, int columns, int numberWin){
-  //VOTRE CODE ICI
+  this.rows = rows;
+  this.columns = columns;
+  this.numberWin = numberWin;
+  this.board = new BoxSymbol[rows * columns];
+  for (int i = 0; i < rows * columns; i++) {
+   board[i] = BoxSymbol.EMPTY;
+  }
+  this.round = 0;
+  this.gameState = GameState.PLAYING;
  }
 
 
@@ -112,7 +120,7 @@ public class Game {
 
   /**
  *renvoie le prochain BoxSymbol prevu,
- * Cette méthode ne modifie pas l'état du jeu.
+ * Cette m�thode ne modifie pas l'�tat du jeu.
    * @return 
    *  the value of the enum BoxSymbol corresponding
    * to the next expected symbol.
@@ -126,26 +134,29 @@ public class Game {
    /**
  * renvoie la valeur de la case a l'index i.
  * Si l'index n'est pas valide, un message d'erreur est
- * imprimé. Le comportement est alors indéterminé
+ * imprim�. Le comportement est alors ind�termin�
     * @param i
     *  the index of the Box in the array board
     * @return 
     *  the value at index i in the variable board.
     */
  public BoxSymbol boxSymbolAt(int i) {
-
-  //VOTRE CODE ICI
+  if (i < 0 || i >= rows * columns) {
+   System.out.println("Illegal position: " + i);
+   return null;
+  }
+  return board[i];
  }
 
   /**
-  * Cette méthode est appelée par le prochain joueur à jouer
-  * à la case à l'index i.
+  * Cette m�thode est appel�e par le prochain joueur � jouer
+  * � la case � l'index i.
   * Si l'index n'est pas valide, un message d'erreur est
-  * imprimé. Le comportement est alors indéterminé
+  * imprim�. Le comportement est alors ind�termin�
   * Si la case choisie n'est pas vide, un message d'erreur s'affiche.
-  * Le comportement est alors indéterminé
-  * Si le coup est valide, le plateau (board) est également mis à jour
-  * ainsi que l'état du jeu. Doit appeler la méthode update.
+  * Le comportement est alors ind�termin�
+  * Si le coup est valide, le plateau (board) est �galement mis � jour
+  * ainsi que l'�tat du jeu. Doit appeler la m�thode update.
     * @param i
     *  the index of the box in the array board that has been 
     * selected by the next player
@@ -156,20 +167,25 @@ public class Game {
    System.out.println("Illegal position: " + i);
    return;
   }
-  //VOTRE CODE ICI
-  
+  if(board[i] != BoxSymbol.EMPTY){
+   System.out.println("Position " + i + " is not empty!");
+   return;
+  }
+  board[i] = nextBoxSymbol();
+  round++;
+  update(i);
  }
 
 
    /**
- * Une méthode d'assistance qui met à jour la variable gameState
- * correctement après que la case à l'index i vient d'etre défini.
- * La méthode suppose qu'avant de paramétrer la case
- * à l'index i, la variable gameState a été correctement définie.
- * cela suppose aussi qu'elle n'est appelée que si le jeu n'a pas encore été
- * été terminé lorsque la case à l'index i a été jouée
+ * Une m�thode d'assistance qui met � jour la variable gameState
+ * correctement apr�s que la case � l'index i vient d'etre d�fini.
+ * La m�thode suppose qu'avant de param�trer la case
+ * � l'index i, la variable gameState a �t� correctement d�finie.
+ * cela suppose aussi qu'elle n'est appel�e que si le jeu n'a pas encore �t�
+ * �t� termin� lorsque la case � l'index i a �t� jou�e
  * (le jeu en cours). Il suffit donc de
- * Vérifiez si jouer à l'index i a terminé la partie.
+ * V�rifiez si jouer � l'index i a termin� la partie.
     * @param i
     *  the index of the box in the array board that has just 
     * been set
@@ -177,22 +193,77 @@ public class Game {
 
 private void update(int index){
  
-   //VOTRE CODE ICI
- 
+   BoxSymbol placed = board[index];
+   if(placed == BoxSymbol.EMPTY) {
+     return;
+   }
+
+   int[][] dirs = { { 0, 1 }, { 1, 0 }, { 1, 1 }, { 1, -1 } };
+   int r0 = index / columns;
+   int c0 = index % columns;
+
+   for(int[] d : dirs) {
+     int count = 1;
+     int dr = d[0], dc = d[1];
+
+     // forward
+     int r = r0 + dr, c = c0 + dc;
+     while(r >= 0 && r < rows && c >= 0 && c < columns && board[r * columns + c] == placed) {
+       count++;
+       r += dr;
+       c += dc;
+     }
+
+     // backward
+     r = r0 - dr;
+     c = c0 - dc;
+     while(r >= 0 && r < rows && c >= 0 && c < columns && board[r * columns + c] == placed) {
+       count++;
+       r -= dr;
+       c -= dc;
+     }
+
+     if(count >= numberWin) {
+       if(placed == BoxSymbol.X) {
+         gameState = GameState.XWIN;
+       } else if(placed == BoxSymbol.O) {
+         gameState = GameState.OWIN;
+       }
+       return;
+     }
+   }
+
+   if(round >= rows * columns) {
+     gameState = GameState.DRAW;
+   } else {
+     gameState = GameState.PLAYING;
+   }
+
 }
 
  
 
    /**
- * Renvoie une représentation sous forme de chaîne du jeu correspondant
- * à l'exemple fourni dans la description du devoir
+ * Renvoie une repr�sentation sous forme de cha�ne du jeu correspondant
+ * � l'exemple fourni dans la description du devoir
     * @return
     *  String representation of the game
    */
 
  public String toString(){
   String res = "";
-  //VOTRE CODE ICI
+  for(int i = 0; i < rows * columns; i++) {
+   BoxSymbol s = boxSymbolAt(i);
+   String ch = ".";
+   if(s == BoxSymbol.X)
+     ch = "X";
+   else if(s == BoxSymbol.O)
+     ch = "O";
+   res += ch;
+   if((i + 1) % columns == 0) {
+     res += "\n";
+   }
+  }
   return res ;
   
  }

@@ -1,48 +1,34 @@
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Computer extends Player {
 
-  public Computer(String name) {
-    super(name);
-  }
+ /**
+  * Plays a move by selecting a random empty box.
+  * First checks if the game is already finished, then chooses
+  * a random empty position from all available positions and plays it.
+  *
+  * @param game the game to play on
+  */
+ public void play(Game game) {
+   // Check if game is already finished
+   if(game.getRound() == game.getRows() * game.getColumns()){
+     System.out.println("Game is finished already!");
+     return;
+   }
 
-  @Override
-  public void play(Game game) {
-    // Vérifie que la partie est jouable
-    if (game == null) {
-      System.out.println("Error: game is null.");
-      return;
-    }
-    if (game.getGameState() != GameState.PLAYING) {
-      System.out.println("Game is finished already!");
-      return;
-    }
-    if (game.getRound() >= game.getRows() * game.getColumns()) {
-      System.out.println("Game is finished already!");
-      return;
-    }
+   // Find all empty positions
+   java.util.ArrayList<Integer> emptyPositions = new java.util.ArrayList<>();
+   for(int i = 0; i < game.getRows() * game.getColumns(); i++) {
+     if(game.boxSymbolAt(i) == BoxSymbol.EMPTY) {
+       emptyPositions.add(i);
+     }
+   }
 
-    // Collecte toutes les cases vides
-    int size = game.getRows() * game.getColumns();
-    List<Integer> empty = new ArrayList<>();
-    for (int i = 0; i < size; i++) {
-      if (game.boxSymbolAt(i) == BoxSymbol.EMPTY) {
-        empty.add(i);
-      }
-    }
-
-    // S'il n'y a aucun coup possible, c'est fini (sécurité)
-    if (empty.isEmpty()) {
-      System.out.println("Game is finished already!");
-      return;
-    }
-
-    // Choix uniforme au hasard parmi les coups possibles
-    int choiceIndex = GameMain.generator.nextInt(empty.size());
-    int move = empty.get(choiceIndex);
-
-    // L'ordinateur joue en silence
-    game.play(move);
-  }
+   // If there are empty positions, choose one randomly and play
+   if(emptyPositions.size() > 0) {
+     int randomIndex = GameMain.generator.nextInt(emptyPositions.size());
+     int position = emptyPositions.get(randomIndex);
+     game.play(position);
+   }
+ }
 }
