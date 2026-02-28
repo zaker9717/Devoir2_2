@@ -1,51 +1,56 @@
+import java.util.Scanner;
+
 public class User extends Player {
 
-    public void play(Game game) {
-        // Check if the game is already finished
-        if (game.getRound() == game.getRows() * game.getColumns() ||
-                game.getGameState() != GameState.PLAYING) {
-            System.out.println("Game is finished already!");
-            return;
-        }
+  public User(String name) {
+    super(name);
+  }
 
-        // Check that it's the human's turn
-        if (game.nextBoxSymbol() != mySymbol) {
-            System.out.println("Not your turn!");
-            return;
-        }
-
-        boolean validMove = false;
-
-        while (!validMove) {
-            // Display the game
-            System.out.print(game.toString());
-
-            // Ask for the move
-            System.out.print(mySymbol + " to play: ");
-            String input = GameMain.console.readLine();
-
-            try {
-                int position = Integer.parseInt(input.trim());
-
-                // Check if position is valid
-                if (position < 0 || position >= game.getRows() * game.getColumns()) {
-                    System.out.println("Invalid position. Try again.");
-                    continue;
-                }
-
-                // Check if the cell is empty - Utiliser BoxSymbol.EMPTY (pas Game.BoxSymbol)
-                if (game.boxSymbolAt(position) != BoxSymbol.EMPTY) {
-                    System.out.println("This cell is already occupied. Try again.");
-                    continue;
-                }
-
-                // Play the move
-                game.play(position);
-                validMove = true;
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-            }
-        }
+  @Override
+  public void play(Game game) {
+    // Vérifie que la partie est jouable
+    if (game == null) {
+      System.out.println("Error: game is null.");
+      return;
     }
+    if (game.getGameState() != GameState.PLAYING) {
+      System.out.println("Game is finished already!");
+      return;
+    }
+    if (game.getRound() >= game.getRows() * game.getColumns()) {
+      System.out.println("Game is finished already!");
+      return;
+    }
+
+    // Invite l'utilisateur à jouer (l'affichage du plateau est géré par GameMain)
+    BoxSymbol next = game.nextBoxSymbol();
+    int maxIndex = game.getRows() * game.getColumns() - 1;
+
+    Scanner sc = GameMain.scanner; // Scanner global fourni par GameMain
+    while (true) {
+      System.out.print(next + " to play: ");
+      if (!sc.hasNextInt()) {
+        // Consomme l'entrée invalide et redemande
+        sc.next();
+        System.out.println("Invalid input; please enter an integer between 0 and " + maxIndex + ".");
+        continue;
+      }
+
+      int idx = sc.nextInt();
+      System.out.println(idx); // pour reproduire l'exemple d'affichage (la valeur retapée)
+
+      // Validation simple avant d'envoyer à game.play
+      if (idx < 0 || idx > maxIndex) {
+        System.out.println("Illegal position: " + idx);
+        continue;
+      }
+      if (game.boxSymbolAt(idx) != BoxSymbol.EMPTY) {
+        System.out.println("Position " + idx + " is not empty!");
+        continue;
+      }
+
+      game.play(idx);
+      return;
+    }
+  }
 }
